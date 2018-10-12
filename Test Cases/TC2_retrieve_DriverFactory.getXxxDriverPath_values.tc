@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC2_retrieve_DriverFactory.getXxxDriverPath_values</name>
+   <tag></tag>
+   <comment></comment>
+   <testCaseGuid>a6f31c32-f78d-49b8-a1d9-0a4ad343c47b</testCaseGuid>
+</TestCaseEntity>
