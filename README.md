@@ -11,15 +11,15 @@ This project was developed using Katalon Studio 5.7.0.
 
 In short, I want my test case script to be able to find out the path to the `chromedriver.exe`, `geckodriver.exe`, `IEDriverServer.exe`, `MicrosoftWebDriver.exe` bundled in the Katalon Studio.
 
-Why? The reason includes:
+Why? The reasons includes:
 
-1. I want to execute tests in Katalon Studio using browsers with customized DesiredCapabilities/Profiles.
-1. I want my test project runnable on Windows, Mac and Linux. Different platforms will have different path the driver binaries.
-2. I want my test project runnable using Chrome, Firefox, IE and Edge. I want to be able to specify which type of browser to use by the drop-down menu equipped in the Katalon GUI. Still I want to create browser with customized DesiredCapabilities.
+1. I want to execute a test project in Katalon Studio using browsers with customized DesiredCapabilities/Profiles.
+1. I want my test project executable on Windows, Mac and Linux. Different platforms will have different paths of driver binaries.
+2. I want my test project executable using all browsers that Katalon Studio supports: Chrome, Firefox, IE and Edge. I want to be able to specify which type of browser to use by the drop-down menu equipped in the Katalon GUI. Even then I want to create browser with customized DesiredCapabilities.
 
 ---
 
-One day  I wrote a test case as follows:
+One day I wrote a test case as follows:
 
 - [TC1_resolving_ChromeDriverPath_with_text](Scripts/TC1_resolving_ChromeDriverPath_with_text/Script1539317352223.groovy)
 ```
@@ -49,13 +49,13 @@ assert driver.getTitle().contains('katalon studio')
 driver.quit()   
 ```
 
-`TC1` worked OK, but I did not like it. I disliked having a path to chromedriver.exe as a fixed string. This way is not good at all.
+`TC1` worked OK, but I did not like it. I disliked having a path to `chromedriver.exe` as a fixed string.
 
 I wanted to find out an alternative approach.
 
 ## Study
 
-I wroite a test script [`TC2_retrieve_DriverFactory.getXxxDriverPath_values`](Scripts/TC2_retrieve_DriverFactory.getXxxDriverPath_values/Script1539317291291.groovy)
+I wrote a test script [`TC2_retrieve_DriverFactory.getXxxDriverPath_values`](Scripts/TC2_retrieve_DriverFactory.getXxxDriverPath_values/Script1539317291291.groovy)
 
 ```
 import com.kms.katalon.core.webui.driver.DriverFactory
@@ -68,6 +68,16 @@ WebUI.comment("geckoDriverPath:${DriverFactory.getGeckoDriverPath()}")
 WebUI.comment("ieDriverPath:${DriverFactory.getIEDriverPath()}")
 ```
 
+
+When I run it with Chrome browser, I got the following output:
+```
+10-12-2018 03:06:57 PM - [INFO]   - executedBrowser:CHROME_DRIVER
+10-12-2018 03:06:57 PM - [INFO]   - chromeDriverPath:C:\Katalon_Studio_Windows_64-5.7.0\configuration\resources\drivers\chromedriver_win32\chromedriver.exe
+10-12-2018 03:06:57 PM - [INFO]   - edgeDriverPath:null
+10-12-2018 03:06:57 PM - [INFO]   - geckoDriverPath:null
+10-12-2018 03:06:57 PM - [INFO]   - ieDriverPath:null
+```
+
 When I run `TC2` with Firefox browser, I got the following output:
 ```
 10-12-2018 03:05:46 PM - [INFO]   - executedBrowser:FIREFOX_DRIVER
@@ -77,22 +87,14 @@ When I run `TC2` with Firefox browser, I got the following output:
 10-12-2018 03:05:46 PM - [INFO]   - ieDriverPath:null
 ```
 
-Also when I run it with Chrome browser, I got the following output:
-```
-10-12-2018 03:06:57 PM - [INFO]   - executedBrowser:CHROME_DRIVER
-10-12-2018 03:06:57 PM - [INFO]   - chromeDriverPath:C:\Katalon_Studio_Windows_64-5.7.0\configuration\resources\drivers\chromedriver_win32\chromedriver.exe
-10-12-2018 03:06:57 PM - [INFO]   - edgeDriverPath:null
-10-12-2018 03:06:57 PM - [INFO]   - geckoDriverPath:null
-10-12-2018 03:06:57 PM - [INFO]   - ieDriverPath:null
-```
 
-This experiment told me
+This experiment revealed:
 
 1. `DriverFactory.getChromeDriverPath()` returns a valid path string when I used Chrome browser to run the test case. But it returns null when other type of drivers are used.
 2. Also `DriverFactory.getGeckoDriverPath()` returns a valid path string when I used Firefox browser to run the test case. But it returns null when other type of drivers are used.
 3. Same for other types of browsers
 
-### Solution
+## Solution
 
 I developed a custom keyword [`my.CustomWebDriverFactory`](Keywords/my/CustomWebDriverFactory.groovy)
 
@@ -178,5 +180,5 @@ driver.quit()
 I feel comfortable with [`TC3_resolving_DriverPath_on_the_fly`](Scripts/TC3_resolving_DriverPath_on_the_fly/Script1539319488235.groovy) in that:
 
 1. it has no path string to driver binaries hard-coded.
-2. it works on Windows, MacOS and Linux without code change.
+2. it works on Windows, MacOS and Linux without any code change.
 3. it works when I choose Chrome, Firefox, IE and possibly Edge. (through I haven't really checked Edge yet)
