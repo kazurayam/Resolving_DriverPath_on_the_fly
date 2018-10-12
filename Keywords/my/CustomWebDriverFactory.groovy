@@ -21,12 +21,14 @@ public class CustomWebDriverFactory {
 				String geckoDriverPath = DriverFactory.getGeckoDriverPath()
 				WebUI.comment(">>> geckoDriverPath=${geckoDriverPath}")
 				System.setProperty("webdriver.gecko.driver", geckoDriverPath)
+				// browser customization with DesiredCapabilities here --- TODO
 				driver = new FirefoxDriver()
 				break
 			case 'CHROME_DRIVER':
 				String chromeDriverPath = DriverFactory.getChromeDriverPath()
 				WebUI.comment(">>> chromeDriverPath=${chromeDriverPath}")
 				System.setProperty("webdriver.chrome.driver", chromeDriverPath)
+				// browser customization with DesiredCapabilities here --- TODO
 				driver = new ChromeDriver()
 				break
 			case 'IE_DRIVER':
@@ -39,6 +41,7 @@ public class CustomWebDriverFactory {
 				String edgeDriverPath = DriverFactory.getEdgeDriverPath()
 				WebUI.comment(">>> edgeDriverPath=${edgeDriverPath}")
 				System.setProperty("webdriver.edge.driver", edgeDriverPath)
+				// you can insert code for browser customization here --- TODO
 				driver = new EdgeDriver()
 				break
 			default:
